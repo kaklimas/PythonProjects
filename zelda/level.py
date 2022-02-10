@@ -5,6 +5,7 @@ from player import Player
 from debug import debug
 from support import import_csv_layout, import_folder
 from random import choice
+from ui import UI
 from weapon import Weapon
 class Level:
     def __init__(self):
@@ -21,6 +22,8 @@ class Level:
         # attack sprites
         self.current_attack = None
         
+        # user interface
+        self.ui = UI()
     
     def create_map(self):
         layouts = {
@@ -63,7 +66,7 @@ class Level:
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
-        debug(self.player.status)
+        self.ui.display(self.player)
         
         
 class YsortCameraGroup(pygame.sprite.Group):
