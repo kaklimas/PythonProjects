@@ -1,5 +1,6 @@
 import pygame
 from settings import *
+from support import convert_dict
 
 class UI:
     def __init__(self):
@@ -13,18 +14,20 @@ class UI:
         self.energy_bar_rect = pygame.Rect(10, 34, ENERGY_BAR_WIDTH, BAR_HEIGHT)
 
         # convert weapon dict 
-        self.weapon_graphics = []
-        for weapon in weapon_data.values():
-            path = weapon['graphic']
-            weapon = pygame.image.load(path).convert_alpha()
-            self.weapon_graphics.append(weapon)
+        self.weapon_graphics = convert_dict(weapon_data)
+        # self.weapon_graphics = []
+        # for weapon in weapon_data.values():
+        #     path = weapon['graphic']
+        #     weapon = pygame.image.load(path).convert_alpha()
+        #     self.weapon_graphics.append(weapon)
         
         # convert magic dict
-        self.magic_graphics = []
-        for magic in magic_data.values():
-            path = magic['graphic']
-            magic = pygame.image.load(path).convert_alpha()
-            self.magic_graphics.append(magic)
+        self.magic_graphics = convert_dict(magic_data)
+        # self.magic_graphics = []
+        # for magic in magic_data.values():
+        #     path = magic['graphic']
+        #     magic = pygame.image.load(path).convert_alpha()
+        #     self.magic_graphics.append(magic)
         
         
     def show_bar(self, current, max_amount, bg_rect, color):
