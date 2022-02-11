@@ -15,6 +15,7 @@ class UI:
 
         # convert weapon dict 
         self.weapon_graphics = convert_dict(weapon_data)
+        
         # self.weapon_graphics = []
         # for weapon in weapon_data.values():
         #     path = weapon['graphic']
@@ -23,6 +24,7 @@ class UI:
         
         # convert magic dict
         self.magic_graphics = convert_dict(magic_data)
+        
         # self.magic_graphics = []
         # for magic in magic_data.values():
         #     path = magic['graphic']
