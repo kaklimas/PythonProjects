@@ -19,3 +19,11 @@ def import_folder(path):
             image_surf = pygame.image.load(full_path).convert_alpha()
             surface_list.append(image_surf)
     return surface_list
+
+def convert_dict(dict):
+    result = []
+    for data in dict.values():
+        path = data['graphic']
+        data = pygame.image.load(path).convert_alpha()
+        result.append(data)
+    return result
