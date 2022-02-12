@@ -1,8 +1,9 @@
 import pygame
 from settings import *
 from support import import_folder
+from entity import Entity
 
-class Player(pygame.sprite.Sprite):
+class Player(Entity):
     def __init__(self, pos, groups, obstacle_sprites, create_attack, destroy_attack, create_magic):
         super().__init__(groups)
         self.image = pygame.image.load('./graphics/test/player.png').convert_alpha()
@@ -12,11 +13,8 @@ class Player(pygame.sprite.Sprite):
         #graphics setup
         self.import_player_assets()
         self.status = 'down'
-        self.frame_index = 0
-        self.animation_speed = 0.15
         
         # movement
-        self.direction = pygame.math.Vector2()
         self.attacking = False
         self.attack_cooldown = 400
         self.attack_time = None
@@ -139,17 +137,17 @@ class Player(pygame.sprite.Sprite):
                 self.weapon = list(weapon_data.keys())[self.weapon_index]
                 
                 
-    def move(self, speed):
-        if self.direction.magnitude() != 0:
-            self.direction = self.direction.normalize()
+    # def move(self, speed):
+    #     if self.direction.magnitude() != 0:
+    #         self.direction = self.direction.normalize()
          
-        self.hitbox.x += self.direction.x * speed
-        self.collision('horizontal')
+    #     self.hitbox.x += self.direction.x * speed
+    #     self.collision('horizontal')
         
-        self.hitbox.y += self.direction.y * speed
-        self.collision('vertical')
+    #     self.hitbox.y += self.direction.y * speed
+    #     self.collision('vertical')
         
-        self.rect.center = self.hitbox.center    
+    #     self.rect.center = self.hitbox.center    
     
     def collision(self, direction):
         if direction == 'horizontal':
@@ -168,20 +166,20 @@ class Player(pygame.sprite.Sprite):
                     if self.direction.y < 0:
                         self.hitbox.top = sprite.hitbox.bottom
     
-    def cooldowns(self):
-        current_time = pygame.time.get_ticks()
-        if self.attacking:
-            if current_time - self.attack_time >= self.attack_cooldown:
-                self.attacking = False
-                self.destroy_attack()
+    # def cooldowns(self):
+    #     current_time = pygame.time.get_ticks()
+    #     if self.attacking:
+    #         if current_time - self.attack_time >= self.attack_cooldown:
+    #             self.attacking = False
+    #             self.destroy_attack()
         
-        if not self.can_switch_weapon:
-            if current_time - self.weapon_switch_time >= self.switch_duration_cooldown:
-                self.can_switch_weapon = True
+    #     if not self.can_switch_weapon:
+    #         if current_time - self.weapon_switch_time >= self.switch_duration_cooldown:
+    #             self.can_switch_weapon = True
         
-        if not self.can_switch_magic:
-            if current_time - self.magic_switch_time >= self.switch_duration_cooldown:
-                self.can_switch_magic = True
+    #     if not self.can_switch_magic:
+    #         if current_time - self.magic_switch_time >= self.switch_duration_cooldown:
+    #             self.can_switch_magic = True
                         
     def animate(self):
         animation = self.animations[self.status]
