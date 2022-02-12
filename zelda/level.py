@@ -29,7 +29,8 @@ class Level:
         layouts = {
             'boundary': import_csv_layout('./map/map_FloorBlocks.csv'),
             'grass': import_csv_layout('./map/map_Grass.csv'),
-            'objects': import_csv_layout('./map/map_Objects.csv')
+            'objects': import_csv_layout('./map/map_Objects.csv'),
+            'entities': import_csv_layout('./map/map_Entities.csv')
         }
         
         graphics = {
