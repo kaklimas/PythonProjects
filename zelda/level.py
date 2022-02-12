@@ -7,6 +7,7 @@ from support import import_csv_layout, import_folder
 from random import choice
 from ui import UI
 from weapon import Weapon
+from enemy import Enemy
 class Level:
     def __init__(self):
         #get the display surface
@@ -62,7 +63,8 @@ class Level:
                                 self.create_attack, 
                                 self.destroy_attack,
                                 self.create_magic)
-                            
+                            else:
+                                Enemy('monster', (x, y), [self.visible_sprites])  
                         
         
     def create_attack(self):
