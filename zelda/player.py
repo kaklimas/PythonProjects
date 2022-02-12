@@ -11,10 +11,13 @@ class Player(Entity):
         self.hitbox = self.rect.inflate(0, -26)
         
         #graphics setup
+        self.frame_index = 0
+        self.animation_speed = 0.15
         self.import_player_assets()
         self.status = 'down'
         
         # movement
+        self.direction = pygame.math.Vector2()
         self.attacking = False
         self.attack_cooldown = 400
         self.attack_time = None

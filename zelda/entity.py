@@ -5,7 +5,8 @@ class Entity(pygame.sprite.Sprite):
         super.__init__(groups)
         self.frame_index = 0
         self.animation_speed = 0.15
-        self.direciton = pygame.math.Vector2()
+        self.direction = pygame.math.Vector2()
+    
     
     def move(self, speed):
         if self.direction.magnitude() != 0:
@@ -18,7 +19,6 @@ class Entity(pygame.sprite.Sprite):
         self.collision('vertical')
         
         self.rect.center = self.hitbox.center    
-        
     
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
