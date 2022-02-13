@@ -49,7 +49,7 @@ class Player(Entity):
     def cooldowns(self):
         current_time = pygame.time.get_ticks()
         if self.attacking:
-            if current_time - self.attack_time >= self.attack_cooldown:
+            if current_time - self.attack_time >= self.attack_cooldown + weapon_data[self.weapon]['cooldown']:
                 self.attacking = False
                 self.destroy_attack()
         
@@ -159,6 +159,11 @@ class Player(Entity):
             
         self.image = animation[int (self.frame_index)]
         self.rect = self.image.get_rect(center = self.hitbox.center)
+        
+    def get_full_weapon_damage(self):
+        base_dmg = self.stats['attack']
+        weapon_dmg = weapon_data[self.weapon]['damage']
+        return base_dmg + weapon_dmg
         
     def update(self):
         self.input()
