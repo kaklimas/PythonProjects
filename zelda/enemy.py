@@ -4,7 +4,7 @@ from settings import *
 from support import import_folder
 
 class Enemy(Entity):
-    def __init__(self, monster_name, pos, groups, obstacle_sprites):
+    def __init__(self, monster_name, pos, groups, obstacle_sprites, damage_player):
         
         # general setup
         super().__init__(groups)
@@ -36,6 +36,7 @@ class Enemy(Entity):
         self.can_attack = True
         self.attack_time = None
         self.attack_cooldown = 400
+        self.damage_player = damage_player
         
         # invincibility timer
         self.vunerable = True
@@ -75,6 +76,7 @@ class Enemy(Entity):
     def actions(self, player):
         if self.status == 'attack':
             self.attack_time = pygame.time.get_ticks()
+            self.damage_player(self.attack_damage, self.attack_type)
         elif self.status == 'move':
             self.direction = self.get_player_distance_direction(player)[1]
             
@@ -91,6 +93,11 @@ class Enemy(Entity):
             self.frame_index = 0
         self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center = self.hitbox.center)
+        if not self.vunerable:
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
         
     def cooldown(self):
         current_time = pygame.time.get_ticks()
@@ -104,18 +111,24 @@ class Enemy(Entity):
         
     def get_damage(self, player, attack_type):
         if self.vunerable:    
+            self.direction = self.get_player_distance_direction(player)[1]
             if attack_type == 'weapon':
                 self.health -= player.get_full_weapon_damage()
             else:
                 pass
             self.hit_time = pygame.time.get_ticks()
             self.vunerable = False
-                
+        
+    def hit_reaction(self):
+        if not self.vunerable:
+            self.direction *= -self.resistance    
+           
     def check_death(self):
         if self.health <= 0:
             self.kill()
         
     def update(self):
+        self.hit_reaction()
         self.move(self.speed)
         self.animate()
         self.cooldown()
