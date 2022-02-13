@@ -1,9 +1,9 @@
 import pygame
 from settings import *
 from support import import_folder
-from entity import Entity
 
-class Player(Entity):
+
+class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites, create_attack, destroy_attack, create_magic):
         super().__init__(groups)
         self.image = pygame.image.load('./graphics/test/player.png').convert_alpha()
@@ -48,7 +48,33 @@ class Player(Entity):
         self.exp = 123
         self.speed = self.stats['speed']
         
+    def move(self, speed):
+        if self.direction.magnitude() != 0:
+            self.direction = self.direction.normalize()
+         
+        self.hitbox.x += self.direction.x * speed
+        self.collision('horizontal')
         
+        self.hitbox.y += self.direction.y * speed
+        self.collision('vertical')
+        
+        self.rect.center = self.hitbox.center    
+    
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+        if self.attacking:
+            if current_time - self.attack_time >= self.attack_cooldown:
+                self.attacking = False
+                self.destroy_attack()
+        
+        if not self.can_switch_weapon:
+            if current_time - self.weapon_switch_time >= self.switch_duration_cooldown:
+                self.can_switch_weapon = True
+        
+        if not self.can_switch_magic:
+            if current_time - self.magic_switch_time >= self.switch_duration_cooldown:
+                self.can_switch_magic = True
+    
     def import_player_assets(self):
         character_path = './graphics/player/'
         self.animations = {
@@ -139,19 +165,6 @@ class Player(Entity):
                     self.weapon_index = 0
                 self.weapon = list(weapon_data.keys())[self.weapon_index]
                 
-                
-    # def move(self, speed):
-    #     if self.direction.magnitude() != 0:
-    #         self.direction = self.direction.normalize()
-         
-    #     self.hitbox.x += self.direction.x * speed
-    #     self.collision('horizontal')
-        
-    #     self.hitbox.y += self.direction.y * speed
-    #     self.collision('vertical')
-        
-    #     self.rect.center = self.hitbox.center    
-    
     def collision(self, direction):
         if direction == 'horizontal':
             for sprite in self.obstacle_sprites:
@@ -168,22 +181,7 @@ class Player(Entity):
                         self.hitbox.bottom = sprite.hitbox.top
                     if self.direction.y < 0:
                         self.hitbox.top = sprite.hitbox.bottom
-    
-    # def cooldowns(self):
-    #     current_time = pygame.time.get_ticks()
-    #     if self.attacking:
-    #         if current_time - self.attack_time >= self.attack_cooldown:
-    #             self.attacking = False
-    #             self.destroy_attack()
-        
-    #     if not self.can_switch_weapon:
-    #         if current_time - self.weapon_switch_time >= self.switch_duration_cooldown:
-    #             self.can_switch_weapon = True
-        
-    #     if not self.can_switch_magic:
-    #         if current_time - self.magic_switch_time >= self.switch_duration_cooldown:
-    #             self.can_switch_magic = True
-                        
+                    
     def animate(self):
         animation = self.animations[self.status]
         self.frame_index += self.animation_speed
