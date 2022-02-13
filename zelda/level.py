@@ -1,4 +1,5 @@
 import pygame
+from enemy import Enemy
 from tile import Tile
 from settings import *
 from player import Player
@@ -54,18 +55,17 @@ class Level:
                         if style == 'objects':
                             surf = graphics['objects'][int(col)] 
                             Tile((x, y), [self.visible_sprites, self.obstacles_sprites], 'object', surf)
+                        if style == 'entities':
+                            if col == '394':
+                                self.player = Player((x, y), 
+                                                    [self.visible_sprites], 
+                                                    self.obstacles_sprites, 
+                                                    self.create_attack, 
+                                                    self.destroy_attack,
+                                                    self.create_magic)                
+                            else:
+                                Enemy('monster', (x, y), [self.visible_sprites])                        
                             
-                        # if style == 'entities':
-                        #     if col == '394':
-                                
-                        #     else:
-                        #         Enemy('monster', (x, y), [self.visible_sprites])  
-        self.player = Player((2000, 1440), 
-                                [self.visible_sprites], 
-                                self.obstacles_sprites, 
-                                self.create_attack, 
-                                self.destroy_attack,
-                                self.create_magic)                
         
     def create_attack(self):
         self.current_attack = Weapon(self.player, [self.visible_sprites])       
