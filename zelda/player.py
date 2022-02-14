@@ -41,8 +41,8 @@ class Player(Entity):
         
         #stats
         self.stats = {'health': 100, 'energy': 60, 'attack': 10, 'magic': 4, 'speed': 6}
-        self.health = self.stats['health'] * 0.7
-        self.energy = self.stats['energy'] * 0.6
+        self.health = self.stats['health'] * 1
+        self.energy = self.stats['energy'] * 1
         self.exp = 123
         self.speed = self.stats['speed']
         
@@ -174,8 +174,7 @@ class Player(Entity):
             self.image.set_alpha(alpha)
         else:
             self.image.set_alpha(255)
-            
-            
+                      
     def get_full_weapon_damage(self):
         base_dmg = self.stats['attack']
         weapon_dmg = weapon_data[self.weapon]['damage']
